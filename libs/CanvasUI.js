@@ -687,7 +687,46 @@ class CanvasUI{
             if ((y + lineHeight) > 0) context.fillText(line, x, y);
 			y += lineHeight;
 		});
+
+// Create a scene
+const scene = new THREE.Scene();
+
+// Create a camera
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+// Create a renderer
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Create a geometry and a material
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+// Create a cube
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// Add interaction
+cube.addEventListener('click', () => {
+    cube.material.color.setHex(Math.random() * 0xffffff);
+});
+
+// Render loop
+const animate = function () {
+    requestAnimationFrame(animate);
+
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+};
+
+animate();
+
 	}
 }
+
 
 export { CanvasUI };
