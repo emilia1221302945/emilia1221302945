@@ -280,7 +280,7 @@ class CanvasUI{
         let elm = this.content[name];
         
         if (elm===undefined){
-            console.warn( CanvasGUI.updateElement: No ${name} found);
+            console.warn( `CanvasGUI.updateElement: No ${name} found`);
             return;
         }
         
@@ -310,7 +310,7 @@ class CanvasUI{
             }
         });
         const elm = (elms.length==0) ? null : this.config[elms[0][0]];
-        //console.log(selected = ${elm});
+        //console.log(`selected = ${elm}`);
         return elm;
     }
 
@@ -318,7 +318,7 @@ class CanvasUI{
         let elm = this.config[name];
         
         if (elm===undefined){
-            console.warn( CanvasUI.updateconfig: No ${name} found);
+            console.warn( `CanvasUI.updateconfig: No ${name} found`);
             return;
         }
         
@@ -336,7 +336,7 @@ class CanvasUI{
         }else{
             const x = uv.x * (this.config.width || 512);
             const y = (1 - uv.y) * (this.config.height || 512);
-            //console.log( hover uv:${uv.x.toFixed(2)},${uv.y.toFixed(2)}>>texturePos:${x.toFixed(0)}, ${y.toFixed(0)});
+            //console.log( `hover uv:${uv.x.toFixed(2)},${uv.y.toFixed(2)}>>texturePos:${x.toFixed(0)}, ${y.toFixed(0)}`);
             const elm = this.getElementAtLocation( x, y );
             if (elm===null){
                 if ( this.selectedElements[index] !== undefined ){
@@ -492,7 +492,7 @@ class CanvasUI{
                 }else if (config.type == "img"){
                     if (config.img === undefined){
                         this.loadImage(content).then(img =>{
-                            console.log(w: ${img.width} | h: ${img.height});
+                            console.log(`w: ${img.width} | h: ${img.height}`);
                             config.img = img;
                             self.needsUpdate = true;
                             self.update();           
@@ -591,7 +591,7 @@ class CanvasUI{
     }
     
 	wrapText(name, txt){
-        //console.log( wrapText: ${name}:${txt});
+        //console.log( `wrapText: ${name}:${txt}`);
 		const words = txt.split(' ');
         let line = '';
 		const lines = [];
@@ -615,10 +615,10 @@ class CanvasUI{
         
         context.textAlign = textAlign;
         
-		context.font = ${fontSize}px '${fontFamily}';
+		context.font = `${fontSize}px '${fontFamily}'`;
 		
         words.forEach( function(word){
-			let testLine = (words.length>1) ? ${line}${word}  : word;
+			let testLine = (words.length>1) ? `${line}${word} ` : word;
         	let metrics = context.measureText(testLine);
         	if (metrics.width > rect.width && word.length>1) {
                 if (line.length==0 && metrics.width > rect.width){
@@ -640,7 +640,7 @@ class CanvasUI{
                     if (word != "") lines.push(word);
                 }else{
 				    lines.push(line);
-				    line = ${word} ;
+				    line = `${word} `;
                 }
 			}else {
 				line = testLine;
@@ -687,7 +687,6 @@ class CanvasUI{
             if ((y + lineHeight) > 0) context.fillText(line, x, y);
 			y += lineHeight;
 		});
-
 	}
 }
 
