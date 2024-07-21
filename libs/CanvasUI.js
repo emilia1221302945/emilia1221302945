@@ -687,84 +687,86 @@ class CanvasUI{
             if ((y + lineHeight) > 0) context.fillText(line, x, y);
 			y += lineHeight;
 		});
+// Ensure Three.js is loaded
+if (typeof THREE === 'undefined') {
+    console.error('Three.js library is not loaded.');
+} else {
+    // Create a scene
+    const scene = new THREE.Scene();
 
-        // Create a scene
-const scene = new THREE.Scene();
+    // Create a camera
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 10;
 
-// Create a camera
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 10;
+    // Create a renderer
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-// Create a renderer
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+    // Create a geometry and a material for the cube
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
-// Create a geometry and a material for the cube
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    // Create a cube
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
 
-// Create a cube
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+    // Create a canvas to draw the text
+    const canvas = document.createElement('canvas');
+    canvas.width = 500; // Set width to avoid canvas issues
+    canvas.height = 100; // Set height to avoid canvas issues
+    const context = canvas.getContext('2d');
+    context.font = '48px sans-serif';
+    context.fillStyle = 'white';
+    context.fillText('Welcome to MMU', 10, 50);
 
-// Add interaction for the cube to change color
-cube.addEventListener('click', () => {
-    cube.material.color.setHex(Math.random() * 0xffffff);
-});
+    // Create a texture from the canvas
+    const textureCanvas = new THREE.CanvasTexture(canvas);
 
-// Create a canvas to draw the text
-const canvas = document.createElement('canvas');
-const context = canvas.getContext('2d');
-context.font = '48px sans-serif';
-context.fillStyle = 'white';
-context.fillText('Welcome to MMU', 10, 50);
+    // Create a material with the texture
+    const signMaterial = new THREE.MeshBasicMaterial({ map: textureCanvas, side: THREE.DoubleSide });
 
-// Create a texture from the canvas
-const textureCanvas = new THREE.CanvasTexture(canvas);
+    // Create a plane geometry for the sign
+    const signGeometry = new THREE.PlaneGeometry(5, 1);
 
-// Create a material with the texture
-const signMaterial = new THREE.MeshBasicMaterial({ map: textureCanvas, side: THREE.DoubleSide });
+    // Create the mesh and position it
+    const sign = new THREE.Mesh(signGeometry, signMaterial);
+    sign.position.set(0, 3, -5); // Adjust the position as needed
+    scene.add(sign);
 
-// Create a plane geometry for the sign
-const signGeometry = new THREE.PlaneGeometry(5, 1);
+    // Create a bookshelf model (simple box geometry)
+    const bookshelfGeometry = new THREE.BoxGeometry(6, 4, 0.5); // Width, Height, Depth
+    const bookshelfMaterial = new THREE.MeshBasicMaterial({ color: 0x8B4513 }); // Brown color for the bookshelf
+    const bookshelf = new THREE.Mesh(bookshelfGeometry, bookshelfMaterial);
+    bookshelf.position.set(0, -1, -5); // Position the bookshelf in the scene
+    scene.add(bookshelf);
 
-// Create the mesh and position it
-const sign = new THREE.Mesh(signGeometry, signMaterial);
-sign.position.set(0, 3, -5); // Adjust the position as needed
-scene.add(sign);
+    // Create multiple books and place them on the bookshelf
+    const bookGeometry = new THREE.BoxGeometry(1, 0.5, 1.5); // Width, Height, Depth
+    const bookMaterial = new THREE.MeshBasicMaterial({ color: 0xdeb887 }); // Light brown color for the books
 
-// Create a bookshelf model (simple box geometry)
-const bookshelfGeometry = new THREE.BoxGeometry(6, 4, 0.5); // Width, Height, Depth
-const bookshelfMaterial = new THREE.MeshBasicMaterial({ color: 0x8B4513 }); // Brown color for the bookshelf
-const bookshelf = new THREE.Mesh(bookshelfGeometry, bookshelfMaterial);
-bookshelf.position.set(0, -1, -5); // Position the bookshelf in the scene
-scene.add(bookshelf);
+    const numBooks = 5;
+    const spacing = 1.2; // Spacing between books
 
-// Create multiple books and place them on the bookshelf
-const bookGeometry = new THREE.BoxGeometry(1, 0.5, 1.5); // Width, Height, Depth
-const bookMaterial = new THREE.MeshBasicMaterial({ color: 0xdeb887 }); // Light brown color for the books
+    for (let i = 0; i < numBooks; i++) {
+        const book = new THREE.Mesh(bookGeometry, bookMaterial);
+        book.position.set(-2.5 + i * spacing, -0.5, -5); // Position the books on the shelf
+        scene.add(book);
+    }
 
-const numBooks = 5;
-const spacing = 1.2; // Spacing between books
+    // Render loop
+    const animate = function () {
+        requestAnimationFrame(animate);
 
-for (let i = 0; i < numBooks; i++) {
-    const book = new THREE.Mesh(bookGeometry, bookMaterial);
-    book.position.set(-2.5 + i * spacing, -0.5, -5); // Position the books on the shelf
-    scene.add(book);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        renderer.render(scene, camera);
+    };
+
+    animate();
 }
 
-// Render loop
-const animate = function () {
-    requestAnimationFrame(animate);
-
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-
-    renderer.render(scene, camera);
-};
-
-animate();
 
 	}
 }
