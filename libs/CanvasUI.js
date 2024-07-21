@@ -30,7 +30,6 @@ borderRadius: pixels
 clipPath: svg path
 border: width color style
 */
-
 class CanvasUI{
 	constructor(content, config){
         const defaultconfig = {
@@ -690,6 +689,5 @@ class CanvasUI{
 		});
 	}
 }
-
 
 export { CanvasUI };
