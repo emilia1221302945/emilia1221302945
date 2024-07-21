@@ -708,10 +708,31 @@ const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-// Add interaction
+// Add interaction for the cube
 cube.addEventListener('click', () => {
     cube.material.color.setHex(Math.random() * 0xffffff);
 });
+
+// Create a canvas to draw the text
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d');
+context.font = '48px sans-serif';
+context.fillStyle = 'white';
+context.fillText('Welcome to MMU', 10, 50);
+
+// Create a texture from the canvas
+const texture = new THREE.CanvasTexture(canvas);
+
+// Create a material with the texture
+const signMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+
+// Create a plane geometry for the sign
+const signGeometry = new THREE.PlaneGeometry(5, 1);
+
+// Create the mesh and position it
+const sign = new THREE.Mesh(signGeometry, signMaterial);
+sign.position.set(0, 3, -5); // Adjust the position as needed
+scene.add(sign);
 
 // Render loop
 const animate = function () {
