@@ -691,5 +691,4 @@ class CanvasUI{
 	}
 }
 
-
 export { CanvasUI };
